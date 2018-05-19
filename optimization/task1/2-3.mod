@@ -4,39 +4,31 @@
 
 param eps := 10^(-5);
 var counter := 0;
-var xk;
-var yk;
+var xk := 4;
+var yk:= 2;
 var xk1 := 4;
 var yk1 := 2;
-var ak := 1;
+var ak;
 var grx;
 var gry;
-var fk;
-var fk1;
-param eta := 0.4;
-
+minimize f: (((xk-ak*grx)-(yk - ak*gry)^2)^2 +1/100)^(1/4) + (yk-ak*gry)^2/100;
+option solver ipopt;  #ipopt; cplex; bonmin; couenne;
 repeat{
 let counter := counter + 1;
-print("ounet");
 let xk:=xk1;
 let yk := yk1;
 let grx := (xk-yk^2)/(2*((xk-yk^2)^2 +1/100)^(3/4));
-let gry := yk - (yk/50 - yk*(xk-yk^2))/((xk-yk^2)^2 +1/100)^(3/4);
-let fk := (((xk)-(yk)^2)^2 +1/100)^(1/4) + (yk)^2/100;
-#ak-?
-let ak := 1;
-repeat {
-    print("first");
-	let ak := ak/2;
-	let xk1 := xk - ak * grx;
-	let yk1 := yk - ak * gry;
-	let fk1 := (((xk1)-(yk1)^2)^2 +1/100)^(1/4) + (yk1)^2/100;	
-} until (fk1 <= fk - ak * eta * (grx * grx + gry * gry));
+let gry := yk - (yk/50 - yk*(xk-yk^2)/((xk-yk^2)^2 +1/100)^(3/4));
+solve;
 let xk1 := xk - ak * grx;
 let yk1 := yk - ak * gry;
+#print(xk1);
+#print(yk1);
 #let fk := ((xk-yk^2)^2 +1/100)^(1/4) + yk^2/100;
 #let fk1 := ((xk1-yk1^2)^2 +1/100)^(1/4) + yk1^2/100;
-} until abs(grx) + abs(gry) < eps;
+} until abs(xk-xk1) < eps and abs(yk-yk1) < eps;
 
+#option solver ipopt; #ipopt; #cplex; #bonmin; #couenne;
+#solve;
 display xk1, yk1, counter;
 
