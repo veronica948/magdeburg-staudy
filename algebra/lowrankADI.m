@@ -1,8 +1,5 @@
 clear;
 load('large_lyap.mat');
-b;
-A;
-shifts;
 tol = 10^(-8);
 k = length(shifts);
 [n,m] = size(A);
