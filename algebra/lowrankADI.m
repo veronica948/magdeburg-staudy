@@ -7,8 +7,9 @@ j = 1;
 Z = [];
 W = b;
 %Rb = zeros(k,1);
-%Rb(1) = ctranspose(W) + W/(norm(b,2)^2);
-while(j <= k && norm(W) > tol)%Rb(j) > tol) 
+%Rb(1) = norm(W * ctranspose(W))/(norm(b,2)^2);
+while(j <= k && norm(W * ctranspose(W),2)/(norm(b,2)^2) > tol) %norm(W,2)
+    j
     V = (A + shifts(j)*eye(n))\W;
     W = W - 2 * real(shifts(j)) * V;
     Z = [Z, sqrt(-2*real(shifts(j)))*V];
