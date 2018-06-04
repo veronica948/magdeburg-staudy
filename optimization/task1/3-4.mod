@@ -17,6 +17,11 @@ subject to contract3{i in indexSet_x, j in indexSet_y}: b[i,j] - (y[j] + 1) * x[
 
 
 option solver bonmin; #ipopt 2047.79; cplex 0; bonmin 2743.64; couenne 2072.35;
+option relax_integrality 1;
 solve;
-display n_x, n_y, f, c, b, x, y;
+display f,x,y;
+fix {i in indexSet_y} y[i] := round(y[i]);
+solve;
+display f, x, y;
 
+#if(match (solve_message, "infeasible"))
